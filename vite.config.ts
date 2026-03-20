@@ -6,15 +6,8 @@ import remarkMdxFrontmatter from 'remark-mdx-frontmatter'
 
 export default defineConfig({
   plugins: [
-    {
-      enforce: 'pre',
-      ...mdx({
-        mdExtensions: [],
-        mdxExtensions: ['.md', '.mdx'],
-        remarkPlugins: [remarkFrontmatter, remarkMdxFrontmatter],
-      }),
-    },
-    react({ include: /\.(jsx|js|md|tsx|ts)$/ }),
+    { enforce: 'pre', ...mdx({ remarkPlugins: [remarkFrontmatter, remarkMdxFrontmatter] }) },
+    react({ include: /\.(jsx|js|mdx|tsx|ts)$/ }),
   ],
   base: '/the-snake/',
 })

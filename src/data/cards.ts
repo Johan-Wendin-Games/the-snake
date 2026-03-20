@@ -14,7 +14,7 @@ type CardModule = {
   color: string
 }
 
-const modules = import.meta.glob<CardModule>('/cards/*.md', { eager: true })
+const modules = import.meta.glob<CardModule>('/cards/*.mdx', { eager: true })
 
 export const CARDS: Card[] = Object.values(modules).map((mod) => ({
   emoji: mod.emoji,

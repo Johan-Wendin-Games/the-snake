@@ -18,9 +18,9 @@ Both views (`AllCardsView`, `InteractiveView`) are always mounted so print CSS w
 
 ```
 cards/
-  *.md                  # one file per card — card content is in Swedish (see format below)
+  *.mdx                  # one file per card — card content is in Swedish (see format below)
 src/
-  data/cards.ts          # loads all /cards/*.md via import.meta.glob and exports CARDS + shuffle()
+  data/cards.ts          # loads all /cards/*.mdx via import.meta.glob and exports CARDS + shuffle()
   components/
     Header.tsx            # tab bar; receives activeTab + onTabChange
     AllCardsView.tsx      # grid of all cards + print button
