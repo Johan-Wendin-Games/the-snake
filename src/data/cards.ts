@@ -9,17 +9,19 @@ export interface Card {
 
 type CardModule = {
   default: ComponentType
-  emoji: string
-  label: string
-  color: string
+  frontmatter: {
+    emoji: string
+    label: string
+    color: string
+  }
 }
 
 const modules = import.meta.glob<CardModule>('/cards/*.mdx', { eager: true })
 
 export const CARDS: Card[] = Object.values(modules).map((mod) => ({
-  emoji: mod.emoji,
-  label: mod.label,
-  color: mod.color,
+  emoji: mod.frontmatter.emoji,
+  label: mod.frontmatter.label,
+  color: mod.frontmatter.color,
   Content: mod.default,
 }))
 
