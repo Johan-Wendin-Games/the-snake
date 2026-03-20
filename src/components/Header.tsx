@@ -1,6 +1,6 @@
 import styles from './Header.module.css'
 
-type Tab = 'overview' | 'interactive'
+type Tab = 'overview' | 'interactive' | 'board'
 
 interface Props {
   activeTab: Tab
@@ -23,6 +23,12 @@ export default function Header({ activeTab, onTabChange }: Props) {
           onClick={() => onTabChange('interactive')}
         >
           🎴 Dra ett kort
+        </button>
+        <button
+          className={`${styles.tab} ${activeTab === 'board' ? styles.active : ''}`}
+          onClick={() => onTabChange('board')}
+        >
+          🐍 Spelplan
         </button>
       </div>
     </header>

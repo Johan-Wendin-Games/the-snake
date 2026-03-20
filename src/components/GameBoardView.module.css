@@ -1,0 +1,246 @@
+.wrapper {
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 16px;
+  gap: 24px;
+}
+
+@media (min-width: 800px) {
+  .wrapper {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: center;
+  }
+}
+
+.board {
+  background: #1a5c2a;
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-width: 520px;
+  width: 100%;
+}
+
+.startLabel {
+  font-family: 'Fredoka One', cursive;
+  color: #ffd700;
+  font-size: 1.3rem;
+  text-align: left;
+  padding: 4px 8px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.goalLabel {
+  font-family: 'Fredoka One', cursive;
+  color: #ffd700;
+  font-size: 1.3rem;
+  text-align: right;
+  padding: 4px 8px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.row {
+  display: flex;
+  gap: 4px;
+}
+
+.square {
+  width: 56px;
+  height: 56px;
+  border-radius: 10px;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.square:hover {
+  transform: scale(1.08);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  z-index: 1;
+}
+
+/* Number squares - dark blue circles */
+.number {
+  background: #2a3a6e;
+  border-color: #1a2a5e;
+}
+
+.num {
+  font-family: 'Fredoka One', cursive;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1.1rem;
+}
+
+/* Star squares - red with gold star */
+.star {
+  background: #c0392b;
+  border-color: #a93226;
+}
+
+.star .icon {
+  color: #ffd700;
+  font-size: 1.5rem;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Question mark squares - red with yellow question mark */
+.question {
+  background: #c0392b;
+  border-color: #a93226;
+}
+
+.question .icon {
+  font-family: 'Fredoka One', cursive;
+  color: #ffd700;
+  font-size: 1.6rem;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+/* Current position marker */
+.current {
+  box-shadow: 0 0 0 3px #ffd700, 0 0 16px rgba(255, 215, 0, 0.6);
+  transform: scale(1.1);
+  z-index: 2;
+}
+
+.current::after {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border-radius: 8px;
+  border: 2px solid rgba(255, 215, 0, 0.6);
+  pointer-events: none;
+}
+
+/* Past squares - slightly dimmed */
+.past {
+  opacity: 0.55;
+}
+
+/* Goal square (last square) */
+.goal {
+  background: linear-gradient(135deg, #f1c40f, #e67e22);
+  border-color: #d4a017;
+}
+
+.goalStar {
+  position: absolute;
+  color: #fff;
+  font-size: 0.8rem;
+  top: 2px;
+  right: 4px;
+  opacity: 0.6;
+}
+
+/* Sidebar */
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 300px;
+  width: 100%;
+}
+
+.status {
+  font-family: 'Nunito', sans-serif;
+  font-size: 1.1rem;
+  color: #5a3e1b;
+  text-align: center;
+}
+
+.status p {
+  margin: 0;
+}
+
+.done {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.3rem;
+  color: #c95c00;
+}
+
+/* Drawn chanskort card */
+.cardPopup {
+  border-radius: 20px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.15);
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.cardEmoji {
+  font-size: 2.5rem;
+  margin-bottom: 8px;
+}
+
+.cardLabel {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.2rem;
+  color: #5a3e1b;
+  margin-bottom: 8px;
+}
+
+.cardContent {
+  font-family: 'Nunito', sans-serif;
+  font-size: 1rem;
+  color: #5a3e1b;
+  line-height: 1.5;
+}
+
+.closeBtn {
+  margin-top: 12px;
+  padding: 8px 20px;
+  border-radius: 10px;
+  border: none;
+  background: rgba(0, 0, 0, 0.1);
+  font-family: 'Fredoka One', cursive;
+  font-size: 0.9rem;
+  color: #5a3e1b;
+  cursor: pointer;
+}
+
+.closeBtn:hover {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.resetBtn {
+  padding: 10px 24px;
+  border-radius: 14px;
+  border: none;
+  background: #c95c00;
+  color: white;
+  font-family: 'Fredoka One', cursive;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.15s;
+  align-self: center;
+}
+
+.resetBtn:hover {
+  background: #a84d00;
+}
+
+@media print {
+  .wrapper {
+    display: none !important;
+  }
+}
