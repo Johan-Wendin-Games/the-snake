@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<title>Chanskort – Ormen</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #fff9f0;
+    font-family: 'Nunito', sans-serif;
+    min-height: 100vh;
+  }
+
+  /* ── Header ── */
+  header {
+    background: #c95c00;
+    color: white;
+    text-align: center;
+    padding: 20px 20px 0;
+  }
+
+  header h1 {
+    font-family: 'Fredoka One', cursive;
+    font-size: 2.2rem;
+    letter-spacing: 0.02em;
+  }
+
+  /* ── Tab bar ── */
+  .tabs {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 16px;
+  }
+
+  .tab {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1rem;
+    padding: 10px 28px;
+    border-radius: 14px 14px 0 0;
+    border: none;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    background: rgba(255,255,255,0.2);
+    color: rgba(255,255,255,0.75);
+  }
+
+  .tab.active {
+    background: #fff9f0;
+    color: #c95c00;
+  }
+
+  /* ── Sections ── */
+  .section { display: none; padding: 28px 20px 40px; }
+  .section.visible { display: block; }
+
+  /* ── ALL CARDS VIEW ── */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  .card {
+    border-radius: 20px;
+    padding: 22px 18px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 10px;
+    position: relative;
+    overflow: hidden;
+    min-height: 170px;
+    border: 3px solid rgba(0,0,0,0.06);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+  }
+
+  .card::after {
+    content: '?';
+    font-family: 'Fredoka One', cursive;
+    position: absolute;
+    bottom: -14px; right: -4px;
+    font-size: 5rem;
+    opacity: 0.06;
+    color: #000;
+    line-height: 1;
+  }
+
+  .card .emoji { font-size: 2.4rem; line-height: 1; }
+
+  .card .label {
+    font-family: 'Fredoka One', cursive;
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    opacity: 0.5;
+  }
+
+  .card .text {
+    font-size: 1rem;
+    font-weight: 800;
+    line-height: 1.4;
+    color: #1a1a1a;
+  }
+
+  /* Card colors */
+  .c1{background:#fde8c8} .c2{background:#d4edda} .c3{background:#d6eaff}
+  .c4{background:#ffd6e7} .c5{background:#e8d5ff} .c6{background:#fff3b0}
+  .c7{background:#c9f0e8} .c8{background:#ffe0e0} .c9{background:#dff2c1}
+
+  /* print button */
+  .print-btn {
+    display: block;
+    margin: 0 auto 24px;
+    background: #c95c00;
+    color: white;
+    font-family: 'Fredoka One', cursive;
+    font-size: 1rem;
+    border: none;
+    border-radius: 50px;
+    padding: 10px 30px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(201,92,0,0.25);
+  }
+  .print-btn:hover { opacity: 0.9; }
+
+  /* ── INTERACTIVE VIEW ── */
+  #interactive {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px 60px;
+    gap: 0;
+  }
+  #interactive.visible { display: flex; }
+
+  .pile-area {
+    position: relative;
+    width: 220px;
+    height: 300px;
+    margin-bottom: 32px;
+    cursor: pointer;
+  }
+
+  /* Stack shadow cards */
+  .pile-shadow {
+    position: absolute;
+    width: 200px;
+    height: 280px;
+    border-radius: 20px;
+    background: #e0c8a8;
+    border: 3px solid rgba(0,0,0,0.08);
+  }
+  .pile-shadow:nth-child(1) { bottom: -8px; left: 10px; transform: rotate(-4deg); }
+  .pile-shadow:nth-child(2) { bottom: -4px; left: 5px; transform: rotate(-2deg); }
+  .pile-shadow:nth-child(3) { bottom: 0;    left: 0;   transform: rotate(0deg); }
+
+  /* Top card (back face) */
+  .pile-top {
+    position: absolute;
+    width: 200px;
+    height: 280px;
+    border-radius: 20px;
+    background: #c95c00;
+    border: 3px solid rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+    box-shadow: 0 8px 28px rgba(201,92,0,0.35);
+    bottom: 0; left: 0;
+  }
+
+  .pile-top:hover {
+    transform: translateY(-6px) rotate(1deg);
+    box-shadow: 0 14px 36px rgba(201,92,0,0.4);
+  }
+
+  .pile-top .back-emoji { font-size: 3.5rem; }
+  .pile-top .back-label {
+    font-family: 'Fredoka One', cursive;
+    color: rgba(255,255,255,0.85);
+    font-size: 1.1rem;
+    letter-spacing: 0.06em;
+  }
+
+  /* Tap instruction */
+  .tap-hint {
+    font-family: 'Fredoka One', cursive;
+    color: #c95c00;
+    font-size: 1rem;
+    opacity: 0.7;
+    margin-bottom: 36px;
+    letter-spacing: 0.04em;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+  }
+
+  /* Revealed card */
+  .reveal-area {
+    perspective: 1000px;
+    width: 260px;
+    height: 340px;
+    margin-bottom: 28px;
+  }
+
+  .flipper {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .flipper.flipped { transform: rotateY(180deg); }
+
+  .face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 24px;
+    backface-visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid rgba(0,0,0,0.08);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  }
+
+  .face.front {
+    background: #c95c00;
+    gap: 12px;
+  }
+
+  .face.front .back-emoji { font-size: 4rem; }
+  .face.front .back-label {
+    font-family: 'Fredoka One', cursive;
+    color: rgba(255,255,255,0.85);
+    font-size: 1.2rem;
+  }
+
+  .face.back {
+    transform: rotateY(180deg);
+    padding: 28px 24px;
+    flex-direction: column;
+    gap: 14px;
+    text-align: center;
+  }
+
+  .face.back .r-emoji { font-size: 3.2rem; }
+  .face.back .r-label {
+    font-family: 'Fredoka One', cursive;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    opacity: 0.5;
+  }
+  .face.back .r-text {
+    font-size: 1.2rem;
+    font-weight: 800;
+    line-height: 1.45;
+    color: #1a1a1a;
+  }
+
+  .reveal-area.hidden { display: none; }
+
+  /* Counter */
+  .counter {
+    font-family: 'Fredoka One', cursive;
+    color: #888;
+    font-size: 0.95rem;
+    margin-bottom: 16px;
+  }
+
+  /* Next / reset buttons */
+  .btn-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .btn {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1rem;
+    padding: 12px 28px;
+    border-radius: 50px;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.1s, box-shadow 0.1s;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+  }
+  .btn:hover { transform: translateY(-2px); }
+  .btn.primary { background: #c95c00; color: white; }
+  .btn.secondary { background: #e8e0d8; color: #555; }
+
+  .empty-pile {
+    font-family: 'Fredoka One', cursive;
+    color: #c95c00;
+    font-size: 1.3rem;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  @media print {
+    header, .tabs, #interactive, .print-btn { display: none !important; }
+    #overview { display: block !important; padding: 0; }
+    .grid { gap: 10px; }
+    .card { box-shadow: none; border: 2px dashed #ccc; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🐍 Chanskort – Ormen</h1>
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('overview', this)">📋 Alla kort</button>
+    <button class="tab" onclick="switchTab('interactive', this)">🎴 Dra ett kort</button>
+  </div>
+</header>
+
+<!-- ALL CARDS -->
+<div id="overview" class="section visible">
+  <button class="print-btn" onclick="window.print()">🖨️ Skriv ut alla kort</button>
+  <div class="grid" id="allCardsGrid"></div>
+</div>
+
+<!-- INTERACTIVE -->
+<div id="interactive" class="section">
+  <div class="counter" id="counter"></div>
+
+  <!-- Pile -->
+  <div class="pile-area" id="pileArea" onclick="drawCard()">
+    <div class="pile-shadow"></div>
+    <div class="pile-shadow"></div>
+    <div class="pile-shadow"></div>
+    <div class="pile-top">
+      <div class="back-emoji">🐍</div>
+      <div class="back-label">Dra ett kort!</div>
+    </div>
+  </div>
+
+  <div class="tap-hint" id="tapHint">👆 Tryck på högen</div>
+
+  <!-- Revealed card -->
+  <div class="reveal-area hidden" id="revealArea">
+    <div class="flipper" id="flipper">
+      <div class="face front">
+        <div class="back-emoji">🐍</div>
+        <div class="back-label">Chanskort</div>
+      </div>
+      <div class="face back" id="cardFace"></div>
+    </div>
+  </div>
+
+  <div class="btn-row" id="btnRow" style="display:none">
+    <button class="btn primary" onclick="nextCard()">🎴 Nästa kort</button>
+    <button class="btn secondary" onclick="resetDeck()">🔄 Blanda om</button>
+  </div>
+</div>
+
+<script>
+const CARDS = [
+  { emoji: "🍪", label: "Aktivitet ihop", text: "Vi bakar kakor eller muffins tillsammans idag!", color: "c1" },
+  { emoji: "🎬", label: "Mysigt", text: "Du får välja vilken film vi tittar på ikväll!", color: "c2" },
+  { emoji: "🧩", label: "Kul ihop", text: "Vi spelar ditt favoritspel tillsammans – du väljer!", color: "c3" },
+  { emoji: "🤗", label: "Gosigt", text: "10 minuters extra kram- och mysstund med mamma/pappa!", color: "c4" },
+  { emoji: "🎨", label: "Aktivitet ihop", text: "Vi ritar eller målar något roligt tillsammans!", color: "c5" },
+  { emoji: "🍦", label: "Godis!", text: "Du får välja en liten godissak eller glass!", color: "c6" },
+  { emoji: "🏃", label: "Kul ihop", text: "Vi går till lekplatsen eller parken – du väljer!", color: "c7" },
+  { emoji: "📖", label: "Mysigt", text: "Du får välja 2 extra böcker till sänggåendet ikväll!", color: "c8" },
+  { emoji: "🫧", label: "Aktivitet ihop", text: "Vi blåser såpbubblor tillsammans utomhus!", color: "c9" },
+  { emoji: "🏗️", label: "Kul ihop", text: "Vi bygger något stort med Lego eller klossar tillsammans!", color: "c1" },
+  { emoji: "🛁", label: "Mysigt", text: "Extra långt bad med leksaker och skum!", color: "c2" },
+  { emoji: "💃", label: "Aktivitet ihop", text: "Vi dansar till dina favoritlåtar tillsammans!", color: "c3" },
+  { emoji: "🐾", label: "Gosigt", text: "Vi bygger ett mysbo av kuddar och filtar och kryper in!", color: "c4" },
+  { emoji: "🌳", label: "Kul ihop", text: "Vi utforskar naturen och letar efter sniglar, insekter eller stenar!", color: "c5" },
+  { emoji: "🎭", label: "Aktivitet ihop", text: "Vi leker låtsaslek – du bestämmer vad vi ska vara!", color: "c6" },
+  { emoji: "🌙", label: "Mysigt", text: "Du får stanna uppe 15 minuter extra ikväll!", color: "c7" },
+  { emoji: "🎤", label: "Kul ihop", text: "Vi sjunger dina favoritlåtar högt tillsammans!", color: "c8" },
+  { emoji: "🥞", label: "Aktivitet ihop", text: "Du får hjälpa till att laga frukost eller mellanmål – du väljer vad!", color: "c9" },
+];
+
+// ── Render all cards ──
+const grid = document.getElementById('allCardsGrid');
+CARDS.forEach(c => {
+  grid.innerHTML += `
+    <div class="card ${c.color}">
+      <div class="label">${c.label}</div>
+      <div class="emoji">${c.emoji}</div>
+      <div class="text">${c.text}</div>
+    </div>`;
+});
+
+// ── Interactive deck ──
+let deck = [];
+let current = null;
+let revealed = false;
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function resetDeck() {
+  deck = shuffle(CARDS);
+  current = null;
+  revealed = false;
+  document.getElementById('revealArea').classList.add('hidden');
+  document.getElementById('pileArea').style.display = 'block';
+  document.getElementById('tapHint').style.display = 'block';
+  document.getElementById('btnRow').style.display = 'none';
+  document.getElementById('flipper').classList.remove('flipped');
+  updateCounter();
+}
+
+function updateCounter() {
+  const el = document.getElementById('counter');
+  if (deck.length === 0) {
+    el.textContent = '🎉 Alla kort är dragna!';
+  } else {
+    el.textContent = `${deck.length} kort kvar i högen`;
+  }
+}
+
+function drawCard() {
+  if (deck.length === 0) return;
+
+  current = deck.pop();
+  revealed = false;
+
+  // Fill card face
+  const face = document.getElementById('cardFace');
+  face.className = `face back ${current.color}`;
+  face.innerHTML = `
+    <div class="r-emoji">${current.emoji}</div>
+    <div class="r-label">${current.label}</div>
+    <div class="r-text">${current.text}</div>
+  `;
+
+  // Reset flip
+  const flipper = document.getElementById('flipper');
+  flipper.classList.remove('flipped');
+
+  // Show reveal area, hide pile
+  document.getElementById('revealArea').classList.remove('hidden');
+  document.getElementById('pileArea').style.display = 'none';
+  document.getElementById('tapHint').style.display = 'none';
+  document.getElementById('btnRow').style.display = 'none';
+
+  // Flip after brief delay
+  setTimeout(() => {
+    flipper.classList.add('flipped');
+    revealed = true;
+    document.getElementById('btnRow').style.display = 'flex';
+  }, 300);
+
+  updateCounter();
+}
+
+function nextCard() {
+  if (deck.length === 0) {
+    document.getElementById('revealArea').classList.add('hidden');
+    document.getElementById('btnRow').style.display = 'none';
+    document.getElementById('counter').textContent = '🎉 Alla kort är dragna! Blanda om för att börja om.';
+    const resetBtn = document.createElement('button');
+    resetBtn.className = 'btn primary';
+    resetBtn.textContent = '🔄 Blanda om';
+    resetBtn.onclick = resetDeck;
+    const row = document.getElementById('btnRow');
+    row.innerHTML = '';
+    row.appendChild(resetBtn);
+    row.style.display = 'flex';
+    return;
+  }
+
+  // Flip back, then draw
+  document.getElementById('flipper').classList.remove('flipped');
+  document.getElementById('btnRow').style.display = 'none';
+  setTimeout(drawCard, 400);
+}
+
+// Init
+resetDeck();
+
+// ── Tab switching ──
+function switchTab(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('visible'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('visible');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>

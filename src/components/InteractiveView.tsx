@@ -1,16 +1,20 @@
 import { useState, useRef, useCallback } from 'react'
-import { CARDS, shuffle } from '../data/cards.js'
+import { type Card, CARDS, shuffle } from '../data/cards.ts'
 import styles from './InteractiveView.module.css'
 
-export default function InteractiveView({ active }) {
-  const deck = useRef(shuffle([...CARDS]))
+interface Props {
+  active: boolean
+}
+
+export default function InteractiveView({ active }: Props) {
+  const deck = useRef<Card[]>(shuffle([...CARDS]))
   const [remaining, setRemaining] = useState(deck.current.length)
-  const [current, setCurrent] = useState(null)
+  const [current, setCurrent] = useState<Card | null>(null)
   const [isFlipped, setIsFlipped] = useState(false)
   const [isDone, setIsDone] = useState(false)
 
   const draw = useCallback(() => {
-    const card = deck.current.pop()
+    const card = deck.current.pop()!
     setRemaining(deck.current.length)
     setCurrent(card)
     setIsFlipped(false)

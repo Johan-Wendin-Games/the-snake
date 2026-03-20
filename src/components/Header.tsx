@@ -1,6 +1,13 @@
 import styles from './Header.module.css'
 
-export default function Header({ activeTab, onTabChange }) {
+type Tab = 'overview' | 'interactive'
+
+interface Props {
+  activeTab: Tab
+  onTabChange: (tab: Tab) => void
+}
+
+export default function Header({ activeTab, onTabChange }: Props) {
   return (
     <header className={styles.header}>
       <h1>🐍 Chanskort – Ormen</h1>

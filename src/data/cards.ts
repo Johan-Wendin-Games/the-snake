@@ -1,4 +1,11 @@
-export const CARDS = [
+export interface Card {
+  emoji: string
+  label: string
+  text: string
+  color: string
+}
+
+export const CARDS: Card[] = [
   { emoji: '🍪', label: 'Aktivitet ihop', text: 'Vi bakar kakor eller muffins tillsammans idag!', color: '#fde8c8' },
   { emoji: '🎬', label: 'Mysigt', text: 'Du får välja vilken film vi tittar på ikväll!', color: '#d4edda' },
   { emoji: '🧩', label: 'Kul ihop', text: 'Vi spelar ditt favoritspel tillsammans – du väljer!', color: '#d6eaff' },
@@ -19,7 +26,7 @@ export const CARDS = [
   { emoji: '🥞', label: 'Aktivitet ihop', text: 'Du får hjälpa till att laga frukost eller mellanmål – du väljer vad!', color: '#dff2c1' },
 ]
 
-export function shuffle(arr) {
+export function shuffle<T>(arr: T[]): T[] {
   const a = [...arr]
   for (let i = a.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));

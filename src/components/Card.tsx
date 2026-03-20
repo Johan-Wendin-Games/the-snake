@@ -1,6 +1,11 @@
+import type { Card as CardData } from '../data/cards.ts'
 import styles from './Card.module.css'
 
-export default function Card({ card }) {
+interface Props {
+  card: CardData
+}
+
+export default function Card({ card }: Props) {
   return (
     <div className={styles.card} style={{ background: card.color }}>
       <div className={styles.label}>{card.label}</div>

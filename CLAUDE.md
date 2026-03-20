@@ -18,7 +18,7 @@ Both views (`AllCardsView`, `InteractiveView`) are always mounted so print CSS w
 
 ```
 src/
-  data/cards.js          # CARDS array (emoji, label, text, color hex) + shuffle()
+  data/cards.js          # CARDS array (emoji, label, text, color hex) + shuffle() — card content is in Swedish
   components/
     Header.jsx            # tab bar; receives activeTab + onTabChange
     AllCardsView.jsx      # grid of all cards + print button

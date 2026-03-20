@@ -1,8 +1,12 @@
-import { CARDS } from '../data/cards.js'
-import Card from './Card.jsx'
+import { CARDS } from '../data/cards.ts'
+import Card from './Card.tsx'
 import styles from './AllCardsView.module.css'
 
-export default function AllCardsView({ active }) {
+interface Props {
+  active: boolean
+}
+
+export default function AllCardsView({ active }: Props) {
   return (
     <section className={`${styles.section} ${active ? styles.visible : ''}`}>
       <button className={styles.printBtn} onClick={() => window.print()}>
