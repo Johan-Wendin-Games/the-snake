@@ -83,7 +83,9 @@ export default function InteractiveView({ active }: Props) {
             >
               <div className={styles.rEmoji}>{current.emoji}</div>
               <div className={styles.rLabel}>{current.label}</div>
-              <div className={styles.rText}>{current.text}</div>
+              <div className={styles.rText}>
+                <current.Content />
+              </div>
             </div>
           </div>
         </div>

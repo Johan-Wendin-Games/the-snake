@@ -10,7 +10,9 @@ export default function Card({ card }: Props) {
     <div className={styles.card} style={{ background: card.color }}>
       <div className={styles.label}>{card.label}</div>
       <div className={styles.emoji}>{card.emoji}</div>
-      <div className={styles.text}>{card.text}</div>
+      <div className={styles.text}>
+        <card.Content />
+      </div>
     </div>
   )
 }

@@ -1,30 +1,27 @@
+import type { ComponentType } from 'react'
+
 export interface Card {
   emoji: string
   label: string
-  text: string
+  color: string
+  Content: ComponentType
+}
+
+type CardModule = {
+  default: ComponentType
+  emoji: string
+  label: string
   color: string
 }
 
-export const CARDS: Card[] = [
-  { emoji: '🍪', label: 'Aktivitet ihop', text: 'Vi bakar kakor eller muffins tillsammans idag!', color: '#fde8c8' },
-  { emoji: '🎬', label: 'Mysigt', text: 'Du får välja vilken film vi tittar på ikväll!', color: '#d4edda' },
-  { emoji: '🧩', label: 'Kul ihop', text: 'Vi spelar ditt favoritspel tillsammans – du väljer!', color: '#d6eaff' },
-  { emoji: '🤗', label: 'Gosigt', text: '10 minuters extra kram- och mysstund med mamma/pappa!', color: '#ffd6e7' },
-  { emoji: '🎨', label: 'Aktivitet ihop', text: 'Vi ritar eller målar något roligt tillsammans!', color: '#e8d5ff' },
-  { emoji: '🍦', label: 'Godis!', text: 'Du får välja en liten godissak eller glass!', color: '#fff3b0' },
-  { emoji: '🏃', label: 'Kul ihop', text: 'Vi går till lekplatsen eller parken – du väljer!', color: '#c9f0e8' },
-  { emoji: '📖', label: 'Mysigt', text: 'Du får välja 2 extra böcker till sänggåendet ikväll!', color: '#ffe0e0' },
-  { emoji: '🫧', label: 'Aktivitet ihop', text: 'Vi blåser såpbubblor tillsammans utomhus!', color: '#dff2c1' },
-  { emoji: '🏗️', label: 'Kul ihop', text: 'Vi bygger något stort med Lego eller klossar tillsammans!', color: '#fde8c8' },
-  { emoji: '🛁', label: 'Mysigt', text: 'Extra långt bad med leksaker och skum!', color: '#d4edda' },
-  { emoji: '💃', label: 'Aktivitet ihop', text: 'Vi dansar till dina favoritlåtar tillsammans!', color: '#d6eaff' },
-  { emoji: '🐾', label: 'Gosigt', text: 'Vi bygger ett mysbo av kuddar och filtar och kryper in!', color: '#ffd6e7' },
-  { emoji: '🌳', label: 'Kul ihop', text: 'Vi utforskar naturen och letar efter sniglar, insekter eller stenar!', color: '#e8d5ff' },
-  { emoji: '🎭', label: 'Aktivitet ihop', text: 'Vi leker låtsaslek – du bestämmer vad vi ska vara!', color: '#fff3b0' },
-  { emoji: '🌙', label: 'Mysigt', text: 'Du får stanna uppe 15 minuter extra ikväll!', color: '#c9f0e8' },
-  { emoji: '🎤', label: 'Kul ihop', text: 'Vi sjunger dina favoritlåtar högt tillsammans!', color: '#ffe0e0' },
-  { emoji: '🥞', label: 'Aktivitet ihop', text: 'Du får hjälpa till att laga frukost eller mellanmål – du väljer vad!', color: '#dff2c1' },
-]
+const modules = import.meta.glob<CardModule>('/cards/*.mdx', { eager: true })
+
+export const CARDS: Card[] = Object.values(modules).map((mod) => ({
+  emoji: mod.emoji,
+  label: mod.label,
+  color: mod.color,
+  Content: mod.default,
+}))
 
 export function shuffle<T>(arr: T[]): T[] {
   const a = [...arr]
